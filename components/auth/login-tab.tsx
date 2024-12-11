@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import { Label } from "@radix-ui/react-label";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/contexts/auth-context";
 
 // Zod schema for form validation
 const loginSchema = z.object({
@@ -29,12 +30,14 @@ export function LoginTab() {
     resolver: zodResolver(loginSchema),
   });
 
+  const { login } = useContext(AuthContext);
+
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       // Simulate login logic
       console.log("Login attempted", data.email);
       // You would typically call an authentication service here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await login(data.email, data.password);
       alert("Login successful!");
     } catch (error) {
       console.error("Login failed", error);

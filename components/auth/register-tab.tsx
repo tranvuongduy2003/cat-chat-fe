@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { Label } from "@radix-ui/react-label";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/contexts/auth-context";
 
 // Zod schema for registration validation
 const registerSchema = z.object({
@@ -44,12 +45,14 @@ export function RegisterTab() {
     resolver: zodResolver(registerSchema),
   });
 
+  const { register: authRegister } = useContext(AuthContext);
+
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
       // Simulate registration logic
       console.log("Registration attempted", data.email, data.username);
       // You would typically call a registration service here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await authRegister(data.username, data.email, data.password);
       alert("Registration successful!");
     } catch (error) {
       console.error("Registration failed", error);
